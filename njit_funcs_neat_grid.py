@@ -76,6 +76,7 @@ def calc_neat_grid_long(
         round_dn(ema_band_lower * (1 - initial_eprice_ema_dist), price_step),
     )
     min_ientry_qty = calc_min_entry_qty(ientry_price, inverse, c_mult, qty_step, min_qty, min_cost)
+    print("calc_neat_grid_long:",  "min_ientry_qty:", min_ientry_qty)
     if psize < min_ientry_qty * 0.9:  # initial entry
         entry_qty = calc_initial_entry_qty(
             balance,
@@ -88,10 +89,12 @@ def calc_neat_grid_long(
             wallet_exposure_limit,
             initial_qty_pct,
         )
+        print("calc_neat_grid_long entry_qty:", entry_qty)
         if psize > 0.0:  # partial initial entry
             entry_qty = max(min_ientry_qty, round_(entry_qty - psize, qty_step))
         return [(entry_qty, ientry_price, "long_ientry")]
     wallet_exposure = qty_to_cost(psize, pprice, inverse, c_mult) / balance
+    print("[calc_neat_grid_long] wallet_exposure:", wallet_exposure)
     if wallet_exposure >= wallet_exposure_limit * 0.99:
         return [(0.0, 0.0, "")]
     if not auto_unstuck_on_timer and auto_unstuck_wallet_exposure_threshold != 0.0:
@@ -132,6 +135,7 @@ def calc_neat_grid_long(
         eqty_exp_base,
         eprice_exp_base,
     )
+    print("[calc_neat_grid_long] grid:", grid)
     if len(grid) == 0:
         return [(0.0, 0.0, "")]
     entries = []
@@ -175,6 +179,7 @@ def calc_neat_grid_short(
     auto_unstuck_ema_dist,
     auto_unstuck_on_timer,
 ) -> [(float, float, str)]:
+    print("[calc_neat_grid_short]")
     if wallet_exposure_limit == 0.0:
         return [(0.0, 0.0, "")]
     if not do_short and psize == 0.0:
@@ -241,6 +246,7 @@ def calc_neat_grid_short(
         eqty_exp_base,
         eprice_exp_base,
     )
+    print("[calc_neat_grid_short] grid:", grid)
     if len(grid) == 0:
         return [(0.0, 0.0, "")]
     entries = []
@@ -303,7 +309,9 @@ def approximate_neat_grid_long(
     if pprice == 0.0 or psize == 0.0:
         raise Exception("cannot appriximate grid without pprice and psize")
     grid, diff, i = eval_(pprice, psize)
+    print("[approximate_neat_grid_long] 1, grid:", grid, "diff:", diff, " i:", i)
     grid, diff, i = eval_(pprice * (pprice / grid[i][3]), psize)
+    print("[approximate_neat_grid_long] 2, grid:", grid, "diff:", diff, " i:", i)
     if diff < 0.01:
         # good guess
         grid, diff, i = eval_(grid[0][1] * (pprice / grid[i][3]), psize)
@@ -391,7 +399,9 @@ def approximate_neat_grid_short(
     if pprice == 0.0 or psize == 0.0:
         raise Exception("cannot appriximate grid without pprice and psize")
     grid, diff, i = eval_(pprice, psize)
+    print("[approximate_neat_grid_short] 1 grid:", grid, "diff:", diff, "i:", i)
     grid, diff, i = eval_(pprice * (pprice / grid[i][3]), psize)
+    print("[approximate_neat_grid_short] 2 grid:", grid, "diff:", diff, "i:", i)
     if diff < 0.01:
         # good guess
         grid, diff, i = eval_(grid[0][1] * (pprice / grid[i][3]), psize)

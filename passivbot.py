@@ -586,6 +586,8 @@ class Bot:
         psize_short = self.position["short"]["size"]
         pprice_short = self.position["short"]["price"]
 
+        logging.info(f"[calc_orders] self.position:{self.position}")
+
         if self.hedge_mode:
             do_long = self.do_long or psize_long != 0.0
             do_short = self.do_short or psize_short != 0.0
