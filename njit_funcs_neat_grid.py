@@ -438,6 +438,7 @@ def approximate_neat_grid_short(
             k += 1
     min_entry_qty = calc_min_entry_qty(grid[k][1], inverse, c_mult, qty_step, min_qty, min_cost)
     grid[k][0] = -max(min_entry_qty, round_(abs(grid[k][2]) - abs_psize, qty_step))
+    print("[approximate_neat_grid_short] k:", k, "grid[k]:", grid[k:])
     return grid[k:] if crop else grid
 
 
