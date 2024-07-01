@@ -398,8 +398,10 @@ def approximate_neat_grid_short(
     abs_psize = abs(psize)
     if pprice == 0.0 or psize == 0.0:
         raise Exception("cannot appriximate grid without pprice and psize")
+    print("pprice:", pprice, "psize:", psize)
     grid, diff, i = eval_(pprice, psize)
     print("[approximate_neat_grid_short] 1 grid:", grid, "diff:", diff, "i:", i)
+    print("pprice * (pprice / grid[i][3]):", pprice * (pprice / grid[i][3]), "psize:", psize)
     grid, diff, i = eval_(pprice * (pprice / grid[i][3]), psize)
     print("[approximate_neat_grid_short] 2 grid:", grid, "diff:", diff, "i:", i)
     if diff < 0.01:
@@ -427,10 +429,13 @@ def approximate_neat_grid_short(
         # find grid as if partial fill were full fill
         remaining_qty = round_(grid[k][2] - psize, qty_step)
         npsize, npprice = calc_new_psize_pprice(psize, pprice, remaining_qty, grid[k][1], qty_step)
+        print("npprice:", npprice, " npsize:", npsize)
         grid, diff, i = eval_(npprice, npsize)
+        print("[approximate_neat_grid_short] 3 grid:", grid, "diff:", diff, " i:", i)
         if k >= len(grid):
             k = len(grid) - 1
             continue
+        print("[approximate_neat_grid_short] npprice * (npprice / grid[k][3]):", npprice * (npprice / grid[k][3]), "npsize:", npsize)
         grid, diff, i = eval_(npprice * (npprice / grid[k][3]), npsize)
         k = 0
         while k < len(grid) - 1 and abs(grid[k][2]) <= abs_psize * 0.99999:
