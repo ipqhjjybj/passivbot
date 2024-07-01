@@ -407,6 +407,7 @@ def approximate_neat_grid_short(
     if diff < 0.01:
         # good guess
         grid, diff, i = eval_(grid[0][1] * (pprice / grid[i][3]), psize)
+        print("[approximate_neat_grid_short] 9 gird:", grid, "diff:", diff, "i:", i)
         return grid[i + 1 :] if crop else grid
     # no close matches
     # assume partial fill
@@ -444,7 +445,7 @@ def approximate_neat_grid_short(
             k += 1
     min_entry_qty = calc_min_entry_qty(grid[k][1], inverse, c_mult, qty_step, min_qty, min_cost)
     grid[k][0] = -max(min_entry_qty, round_(abs(grid[k][2]) - abs_psize, qty_step))
-    print("[approximate_neat_grid_short] k:", k, "grid[k]:", grid[k:])
+    print("[approximate_neat_grid_short] k:", k, "grid[k]:", grid[k:], "crop:", crop)
     return grid[k:] if crop else grid
 
 
