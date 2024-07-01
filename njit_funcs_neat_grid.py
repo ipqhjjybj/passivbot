@@ -437,6 +437,7 @@ def approximate_neat_grid_short(
             continue
         print("[approximate_neat_grid_short] npprice * (npprice / grid[k][3]):", npprice * (npprice / grid[k][3]), "npsize:", npsize)
         grid, diff, i = eval_(npprice * (npprice / grid[k][3]), npsize)
+        print("[approximate_neat_grid_short] 4 grid:", grid, "diff:", diff, " i:", i)
         k = 0
         while k < len(grid) - 1 and abs(grid[k][2]) <= abs_psize * 0.99999:
             # find first node whose psize > psize
