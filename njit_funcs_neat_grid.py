@@ -426,6 +426,7 @@ def approximate_neat_grid_short(
     if k == len(grid):
         # means wallet_exposure limit is exceeded
         return np.empty((0, 5)) if crop else grid
+    print("[approximate_neat_grid_short] before see, grid:", grid)
     for _ in range(5):
         # find grid as if partial fill were full fill
         remaining_qty = round_(grid[k][2] - psize, qty_step)
@@ -443,6 +444,7 @@ def approximate_neat_grid_short(
         while k < len(grid) - 1 and abs(grid[k][2]) <= abs_psize * 0.99999:
             # find first node whose psize > psize
             k += 1
+    print("[approximate_neat_grid_short] after see, grid:", grid)
     min_entry_qty = calc_min_entry_qty(grid[k][1], inverse, c_mult, qty_step, min_qty, min_cost)
     grid[k][0] = -max(min_entry_qty, round_(abs(grid[k][2]) - abs_psize, qty_step))
     print("[approximate_neat_grid_short] k:", k, "grid[k]:", grid[k:], "crop:", crop)
