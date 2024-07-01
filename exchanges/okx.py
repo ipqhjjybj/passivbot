@@ -34,6 +34,7 @@ class OKXBot(Bot):
         self.okx = getattr(ccxt, "okx")(
             {"apiKey": self.key, "secret": self.secret, "password": self.passphrase}
         )
+        self.okx.set_sandbox_mode(True)
         self.custom_id_max_length = 32
 
     async def init_market_type(self):
