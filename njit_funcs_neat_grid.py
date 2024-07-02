@@ -398,16 +398,16 @@ def approximate_neat_grid_short(
     abs_psize = abs(psize)
     if pprice == 0.0 or psize == 0.0:
         raise Exception("cannot appriximate grid without pprice and psize")
-    print("pprice:", pprice, "psize:", psize)
+    #print("pprice:", pprice, "psize:", psize)
     grid, diff, i = eval_(pprice, psize)
-    print("[approximate_neat_grid_short] 1 grid:", grid, "diff:", diff, "i:", i)
-    print("pprice * (pprice / grid[i][3]):", pprice * (pprice / grid[i][3]), "psize:", psize)
+    #print("[approximate_neat_grid_short] 1 grid:", grid, "diff:", diff, "i:", i)
+    #print("pprice * (pprice / grid[i][3]):", pprice * (pprice / grid[i][3]), "psize:", psize)
     grid, diff, i = eval_(pprice * (pprice / grid[i][3]), psize)
-    print("[approximate_neat_grid_short] 2 grid:", grid, "diff:", diff, "i:", i)
+    #print("[approximate_neat_grid_short] 2 grid:", grid, "diff:", diff, "i:", i)
     if diff < 0.01:
         # good guess
         grid, diff, i = eval_(grid[0][1] * (pprice / grid[i][3]), psize)
-        print("[approximate_neat_grid_short] 9 gird:", grid, "diff:", diff, "i:", i)
+        #print("[approximate_neat_grid_short] 9 gird:", grid, "diff:", diff, "i:", i)
         return grid[i + 1 :] if crop else grid
     # no close matches
     # assume partial fill
@@ -426,28 +426,28 @@ def approximate_neat_grid_short(
     if k == len(grid):
         # means wallet_exposure limit is exceeded
         return np.empty((0, 5)) if crop else grid
-    print("[approximate_neat_grid_short] before see, grid:", grid)
+    #print("[approximate_neat_grid_short] before see, grid:", grid)
     for _ in range(5):
         # find grid as if partial fill were full fill
         remaining_qty = round_(grid[k][2] - psize, qty_step)
         npsize, npprice = calc_new_psize_pprice(psize, pprice, remaining_qty, grid[k][1], qty_step)
-        print("npprice:", npprice, " npsize:", npsize)
+        #print("npprice:", npprice, " npsize:", npsize)
         grid, diff, i = eval_(npprice, npsize)
-        print("[approximate_neat_grid_short] 3 grid:", grid, "diff:", diff, " i:", i)
+        #print("[approximate_neat_grid_short] 3 grid:", grid, "diff:", diff, " i:", i)
         if k >= len(grid):
             k = len(grid) - 1
             continue
-        print("[approximate_neat_grid_short] npprice * (npprice / grid[k][3]):", npprice * (npprice / grid[k][3]), "npsize:", npsize)
+        #print("[approximate_neat_grid_short] npprice * (npprice / grid[k][3]):", npprice * (npprice / grid[k][3]), "npsize:", npsize)
         grid, diff, i = eval_(npprice * (npprice / grid[k][3]), npsize)
-        print("[approximate_neat_grid_short] 4 grid:", grid, "diff:", diff, " i:", i)
+        #print("[approximate_neat_grid_short] 4 grid:", grid, "diff:", diff, " i:", i)
         k = 0
         while k < len(grid) - 1 and abs(grid[k][2]) <= abs_psize * 0.99999:
             # find first node whose psize > psize
             k += 1
-    print("[approximate_neat_grid_short] after see, grid:", grid, "len(grid):", len(grid), "grid[k:]:", grid[k:])
+    #print("[approximate_neat_grid_short] after see, grid:", grid, "len(grid):", len(grid), "grid[k:]:", grid[k:])
     min_entry_qty = calc_min_entry_qty(grid[k][1], inverse, c_mult, qty_step, min_qty, min_cost)
     grid[k][0] = -max(min_entry_qty, round_(abs(grid[k][2]) - abs_psize, qty_step))
-    print("[approximate_neat_grid_short] k:", k, "grid[k:]:", grid[k:], "crop:", crop)
+    #print("[approximate_neat_grid_short] k:", k, "grid[k:]:", grid[k:], "crop:", crop)
     return grid[k:] if crop else grid
 
 
