@@ -246,7 +246,7 @@ def calc_neat_grid_short(
         eqty_exp_base,
         eprice_exp_base,
     )
-    print("[calc_neat_grid_short] grid:", grid)
+    #print("[calc_neat_grid_short] grid:", grid)
     if len(grid) == 0:
         return [(0.0, 0.0, "")]
     entries = []
